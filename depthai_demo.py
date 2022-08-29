@@ -391,6 +391,7 @@ class Demo:
         global x_global
         global y_global
         global z_global
+        global ready_to_send
         diff = time.monotonic() - self.timer
         if diff < 0.02:
             time.sleep(diff)
@@ -673,7 +674,8 @@ def send_thread():
             send_data(x_global, y_global, z_global)
             ready_to_send = False
         else:
-            print("DEBUG : Nothing TODO")
+            pass
+            #print("DEBUG : Nothing TODO")
 
 if __name__ == "__main__":
     try:
