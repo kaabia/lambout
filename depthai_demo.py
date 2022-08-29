@@ -1143,7 +1143,13 @@ def send_data(x,y,z):
 if __name__ == "__main__":
     try:
         if args.noSupervisor:
+            print("TRUE == args.noSupervisor")
             print("args.guiType = {}".format(args.guiType))
+            if args.guiType == "qt":
+                runQt()
+            else:
+                args.guiType = "cv"
+                runOpenCv()
         else:
             s = Supervisor()
             if args.guiType != "cv":
