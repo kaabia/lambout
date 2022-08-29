@@ -28,17 +28,8 @@ sys.path.append(str((Path(__file__).parent / "depthai_sdk" / "src").absolute()))
 
 from depthai_helpers.app_manager import App
 from depthai_helpers.arg_manager import parseArgs
+
 args = parseArgs()
-if __name__ == "__main__":
-    # Instead of the depthai_demo, run the specified App
-    if args.app is not None:
-        try:
-            app = App(appName=args.app)
-            app.createVenv()
-            app.runApp()
-            sys.exit(0)
-        except KeyboardInterrupt:
-            sys.exit(0)
 
 try:
     import cv2
@@ -51,7 +42,6 @@ except Exception as ex:
 
 from log_system_information import make_sys_report
 from depthai_helpers.supervisor import Supervisor
-
 from depthai_helpers.config_manager import ConfigManager, DEPTHAI_ZOO, DEPTHAI_VIDEOS
 from depthai_helpers.metrics import MetricManager
 from depthai_helpers.version_check import checkRequirementsVersion
@@ -60,9 +50,6 @@ from depthai_sdk.managers import NNetManager, SyncedPreviewManager, PreviewManag
 
 class OverheatError(RuntimeError):
     pass
-
-
-
 
 if args.noSupervisor and args.guiType == "qt":
     if "QT_QPA_PLATFORM_PLUGIN_PATH" in os.environ:
@@ -78,6 +65,7 @@ if not args.debug and not args.skipVersionCheck and platform.machine() not in ['
     checkRequirementsVersion()
 
 sentryEnabled = False
+
 try:
     import sentry_sdk
 
@@ -111,9 +99,7 @@ class Trackbars:
         Trackbars.instances[name] = {**Trackbars.instances.get(name, {}), window: defaultVal}
         cv2.setTrackbarPos(name, window, defaultVal)
 
-
 noop = lambda *a, **k: None
-
 
 class Demo:
     DISP_CONF_MIN = int(os.getenv("DISP_CONF_MIN", 0))
@@ -135,11 +121,23 @@ class Demo:
             self.setup(conf)
             self.run()
 
-    def __init__(self, displayFrames=True, onNewFrame = noop, onShowFrame = noop, onNn = noop, onReport = noop, onSetup = noop, onTeardown = noop, onIter = noop, onAppSetup = noop, onAppStart = noop, shouldRun = lambda: True, showDownloadProgress=None, collectMetrics=False):
+    def __init__(self, displayFrames=True,
+                       onNewFrame = noop,
+                       onShowFrame = noop,
+                       onNn = noop,
+                       onReport = noop,
+                       onSetup = noop,
+                       onTeardown = noop,
+                       onIter = noop,
+                       onAppSetup = noop,
+                       onAppStart = noop,
+                       shouldRun = lambda: True,
+                       showDownloadProgress=None,
+                       collectMetrics=False):
+
         self._openvinoVersion = None
         self._displayFrames = displayFrames
         self.toggleMetrics(collectMetrics)
-
         self.onNewFrame = onNewFrame
         self.onShowFrame = onShowFrame
         self.onNn = onNn
@@ -152,7 +150,18 @@ class Demo:
         self.onAppSetup = onAppSetup
         self.onAppStart = onAppStart
 
-    def setCallbacks(self, onNewFrame=None, onShowFrame=None, onNn=None, onReport=None, onSetup=None, onTeardown=None, onIter=None, onAppSetup=None, onAppStart=None, shouldRun=None, showDownloadProgress=None):
+    def setCallbacks(self, onNewFrame=None,
+                           onShowFrame=None,
+                           onNn=None,
+                           onReport=None,
+                           onSetup=None,
+                           onTeardown=None,
+                           onIter=None,
+                           onAppSetup=None,
+                           onAppStart=None,
+                           shouldRun=None,
+                           showDownloadProgress=None):
+
         if onNewFrame is not None:
             self.onNewFrame = onNewFrame
         if onShowFrame is not None:
@@ -262,20 +271,18 @@ class Demo:
                                   xout=Previews.color.name in self._conf.args.show)
 
             if self._conf.useDepth:
-                self._pm.createDepth(
-                    self._conf.args.disparityConfidenceThreshold,
-                    self._conf.getMedianFilter(),
-                    self._conf.args.sigma,
-                    self._conf.args.stereoLrCheck,
-                    self._conf.args.lrcThreshold,
-                    self._conf.args.extendedDisparity,
-                    self._conf.args.subpixel,
-                    useDepth=Previews.depth.name in self._conf.args.show or Previews.depthRaw.name in self._conf.args.show,
-                    useDisparity=Previews.disparity.name in self._conf.args.show or Previews.disparityColor.name in self._conf.args.show,
-                    useRectifiedLeft=Previews.rectifiedLeft.name in self._conf.args.show,
-                    useRectifiedRight=Previews.rectifiedRight.name in self._conf.args.show,
-                    alignment=dai.CameraBoardSocket.RGB if self._conf.args.stereoLrCheck and not self._conf.args.noRgbDepthAlign else None
-                )
+                self._pm.createDepth(self._conf.args.disparityConfidenceThreshold,
+                                     self._conf.getMedianFilter(),
+                                     self._conf.args.sigma,
+                                     self._conf.args.stereoLrCheck,
+                                     self._conf.args.lrcThreshold,
+                                     self._conf.args.extendedDisparity,
+                                     self._conf.args.subpixel,
+                                     useDepth=Previews.depth.name in self._conf.args.show or Previews.depthRaw.name in self._conf.args.show,
+                                     useDisparity=Previews.disparity.name in self._conf.args.show or Previews.disparityColor.name in self._conf.args.show,
+                                     useRectifiedLeft=Previews.rectifiedLeft.name in self._conf.args.show,
+                                     useRectifiedRight=Previews.rectifiedRight.name in self._conf.args.show,
+                                     alignment=dai.CameraBoardSocket.RGB if self._conf.args.stereoLrCheck and not self._conf.args.noRgbDepthAlign else None)
 
             if self._conf.irEnabled(self._device):
                 self._pm.updateIrConfig(self._device, self._conf.args.irDotBrightness, self._conf.args.irFloodBrightness)
@@ -1096,19 +1103,19 @@ s.bind((HOST, PORT)) # Bind to the port
 s.listen(5) # Now wait for client connection
 
 # function to create threads
-def send_function(arg):
-    print("************************************************************************")
-    global ready_to_send
-    if ready_to_send:
-        print("ready_to_send = True")
-        send_data(x_global, y_global, z_global)
-        sleep(1)
-        ready_to_send = False
-
-thread = Thread(target = send_function, args = (10, ))
-thread.start()
-thread.join()
-print("thread finished...exiting")
+#def send_function(arg):
+#    print("************************************************************************")
+#    global ready_to_send
+#    if ready_to_send:
+#        print("ready_to_send = True")
+#        send_data(x_global, y_global, z_global)
+#        sleep(1)
+#        ready_to_send = False
+#
+#thread = Thread(target = send_function, args = (10, ))
+#thread.start()
+#thread.join()
+#print("thread finished...exiting")
 
 # Send data
 def send_data(x,y,z):
@@ -1142,13 +1149,17 @@ def send_data(x,y,z):
 if __name__ == "__main__":
     try:
         if args.noSupervisor:
+            print("TRUE == args.noSupervisor")
+            print("args.guiType = {}".format(args.guiType))
             if args.guiType == "qt":
                 runQt()
             else:
                 args.guiType = "cv"
                 runOpenCv()
         else:
+            print("FALSE == args.noSupervisor")
             s = Supervisor()
+            print("args.guiType = {}".format(args.guiType))
             if args.guiType != "cv":
                 available = s.checkQtAvailability()
                 if args.guiType == "qt" and not available:
