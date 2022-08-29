@@ -1142,9 +1142,14 @@ def send_data(x,y,z):
 
 if __name__ == "__main__":
     try:
-        s = Supervisor()
-        args.guiType = "cv"
-        s.runDemo(args)
+        if args.noSupervisor:
+            print("args.guiType = {}".format(args.guiType))
+        else:
+            s = Supervisor()
+            if args.guiType != "cv":
+                available = s.checkQtAvailability()
+                args.guiType = "cv"
+            s.runDemo(args)
     except KeyboardInterrupt:
         sys.exit(0) 
 
