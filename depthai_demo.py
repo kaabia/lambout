@@ -638,12 +638,12 @@ mysocket.listen(5) # Now wait for client connection
 
 # Send data
 def send_data(x,y,z):
-    print ("start sending data")
+    #print ("start sending data")
     try:
         c, addr = mysocket.accept() # Establish connection with client
-        print ("connection established")
+        print ("New connection made!")
         try:
-            print ("start recieving request")
+            #print ("start recieving request")
             msg = c.recv(1024).decode()
             print("Request = ", msg)
             X= y+0.33
@@ -651,7 +651,6 @@ def send_data(x,y,z):
             Z= z-0.2
             if True:#if ((Z>0.7) and (Z<1.3)):
                 instruction = f"({X}, {Y}, {Z})"
-                print ("start sending ...")
                 c.send(instruction.encode('ascii'))
                 print("The position is sent = {}".format(instruction.encode('ascii')))
             else:
@@ -659,19 +658,16 @@ def send_data(x,y,z):
         except:
             print ("Fail recieving request or sending data")
     except:
-        print("connection cannot be established")
+        #print("connection cannot be established")
+        pass
 
 #function to create threads
 def send_thread(threadName, delay):
     while 1:
         global ready_to_send
         if ready_to_send:
-            print("{} -> DEBUG : ready_to_send = True".format(threadName))
             send_data(x_global, y_global, z_global)
             ready_to_send = False
-        else:
-            pass
-            #print("DEBUG : Nothing TODO")
 
 if __name__ == "__main__":
     try:
