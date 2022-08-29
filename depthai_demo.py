@@ -650,12 +650,10 @@ def send_data(x,y,z):
             Y= x-0.03
             Z= z-0.2
             if ((Z>0.7) and (Z<1.3)):
-                instruction = f"({X}, {Y}, {Z})".encode()
-                print(instruction)
-                print(type(instruction))
+                instruction = f"({X}, {Y}, {Z})"
                 print ("start sending ...")
-                c.send(instruction)
-                print("The position is sent")
+                c.send(instruction.encode('ascii'))
+                print("The position is sent = {}".format(instruction.encode('ascii')))
             else:
                 pass
         except:

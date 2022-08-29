@@ -20,6 +20,6 @@ s.send(msg.encode('ascii'))
 # Receive no more than 1024 bytes
 msg = s.recv(1024)                                    
 
-print("Recieved data {}".format(msg.decode('ascii')))
+print("Recieved data {}".format(msg))
 
 s.close()
