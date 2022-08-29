@@ -672,10 +672,9 @@ def send_thread(arg):
         send_data(x_global, y_global, z_global)
         ready_to_send = False
 
-
 if __name__ == "__main__":
     try:
-        thread.start_new_thread( send_thread, ("Main") )
+        thread.start_new_thread( send_thread, ("Main", 2, ) )
         args.guiType = "cv"
         runOpenCv()
     except KeyboardInterrupt:
