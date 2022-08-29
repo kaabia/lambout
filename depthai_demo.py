@@ -1142,21 +1142,33 @@ def send_data(x,y,z):
 
 if __name__ == "__main__":
     try:
-        s = Supervisor()
-        print("args.guiType = {}".format(args.guiType))
-        if args.guiType != "cv":
-            available = s.checkQtAvailability()
-            print("available == {}".format(available))
-            if args.guiType == "auto" and platform.machine() == 'aarch64':
-                print("setting guiType to cv")
-                args.guiType = "cv"
-            elif available:
-                print("setting guiType to qt")
-                args.guiType = "qt"
+        if args.noSupervisor:
+            print("TRUE == args.noSupervisor")
+            print("args.guiType = {}".format(args.guiType))
+            if args.guiType == "qt":
+                runQt()
             else:
-                print("setting guiType to cv heeeere")
                 args.guiType = "cv"
-        s.runDemo(args)
+                runOpenCv()
+        else:
+            print("FALSE == args.noSupervisor")
+            s = Supervisor()
+            print("args.guiType = {}".format(args.guiType))
+            if args.guiType != "cv":
+                available = s.checkQtAvailability()
+                print("available == {}".format(available))
+                if args.guiType == "qt" and not available:
+                    raise RuntimeError("QT backend is not available, run the script with --guiType \"cv\" to use OpenCV backend")
+                if args.guiType == "auto" and platform.machine() == 'aarch64':  # Disable Qt by default on Jetson due to Qt issues
+                    print("args.guiType = cv")
+                    args.guiType = "cv"
+                elif available:
+                    print("args.guiType = qt")
+                    args.guiType = "qt"
+                else:
+                    print("args.guiType = cv")
+                    args.guiType = "cv"
+            s.runDemo(args)
     except KeyboardInterrupt:
         sys.exit(0) 
 
