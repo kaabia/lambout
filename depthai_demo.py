@@ -620,26 +620,26 @@ def runOpenCv():
     atexit.register(demo.stop)
     demo.run_all(confManager)
 
-# function to create threads
-#def send_function(arg):
-#    print("************************************************************************")
-#    global ready_to_send
-#    if ready_to_send:
-#        print("ready_to_send = True")
-#        send_data(x_global, y_global, z_global)
-#        sleep(1)
-#        ready_to_send = False
-#
-#thread = Thread(target = send_function, args = (10, ))
-#thread.start()
-#thread.join()
-#print("thread finished...exiting")
+###########################################################################
+################################### MAIN ##################################
+###########################################################################
+
+HOST = ""    # The remote host
+PORT = 30000 # The same port as used by the server
+
+print("Starting Program")
+
+mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+mysocket.settimeout(1)
+mysocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+mysocket.bind((HOST, PORT)) # Bind to the port 
+mysocket.listen(5) # Now wait for client connection
 
 # Send data
 def send_data(x,y,z):
     print ("start sending data")
     try:
-        c, addr = s.accept() # Establish connection with client
+        c, addr = mysocket.accept() # Establish connection with client
         print ("connection established")
         try:
             print ("start recieving request")
@@ -664,43 +664,19 @@ def send_data(x,y,z):
     except:
         print("connection cannot be established")
 
-###########################################################################
-################################### MAIN ##################################
-###########################################################################
+#function to create threads
+def send_thread(arg):
+    global ready_to_send
+    if ready_to_send:
+        print("DEBUG : ready_to_send = True")
+        send_data(x_global, y_global, z_global)
+        ready_to_send = False
 
-HOST = ""    # The remote host
-PORT = 30000 # The same port as used by the server
-
-print("Starting Program")
-
-mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-mysocket.settimeout(1)
-mysocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-mysocket.bind((HOST, PORT)) # Bind to the port 
-mysocket.listen(5) # Now wait for client connection
-
-# Define a function for the thread
-def main_thread(threadName, delay):
-   while 1:
-      print ("{}: {}".format(threadName, time.ctime(time.time())))
-
-# Define a function for the thread
-def main_thread(threadName, delay):
-    while 1:
-        print("Hellooooooooooooooooooooooooo")
-        sleep(1)
-
-# Define a function for the thread
-def print_time(threadName, delay):
-    print("Hello")
 
 if __name__ == "__main__":
     try:
-        thread.start_new_thread( main_thread, ("Main", 2, ) )
+        thread.start_new_thread( send_thread, ("Main") )
         args.guiType = "cv"
         runOpenCv()
-        #thread.start_new_thread( print_time, ("Thread-2", , ) )
-        while 1:
-            pass
     except KeyboardInterrupt:
         sys.exit(0)
