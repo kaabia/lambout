@@ -1142,33 +1142,9 @@ def send_data(x,y,z):
 
 if __name__ == "__main__":
     try:
-        if args.noSupervisor:
-            print("TRUE == args.noSupervisor")
-            print("args.guiType = {}".format(args.guiType))
-            if args.guiType == "qt":
-                runQt()
-            else:
-                args.guiType = "cv"
-                runOpenCv()
-        else:
-            print("FALSE == args.noSupervisor")
-            s = Supervisor()
-            print("args.guiType = {}".format(args.guiType))
-            if args.guiType != "cv":
-                available = s.checkQtAvailability()
-                print("available == {}".format(available))
-                if args.guiType == "qt" and not available:
-                    raise RuntimeError("QT backend is not available, run the script with --guiType \"cv\" to use OpenCV backend")
-                if args.guiType == "auto" and platform.machine() == 'aarch64':  # Disable Qt by default on Jetson due to Qt issues
-                    print("args.guiType = cv")
-                    args.guiType = "cv"
-                elif available:
-                    print("args.guiType = qt")
-                    args.guiType = "qt"
-                else:
-                    print("args.guiType = cv heeeeeeeeere")
-                    args.guiType = "cv"
-            s.runDemo(args)
+        s = Supervisor()
+        args.guiType = "cv"
+        s.runDemo(args)
     except KeyboardInterrupt:
         sys.exit(0) 
 
