@@ -649,7 +649,7 @@ def send_data(x,y,z):
             X= y+0.33
             Y= x-0.03
             Z= z-0.2
-            if ((Z>0.7) and (Z<1.3)):
+            if True:#if ((Z>0.7) and (Z<1.3)):
                 instruction = f"({X}, {Y}, {Z})"
                 print ("start sending ...")
                 c.send(instruction.encode('ascii'))
