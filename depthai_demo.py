@@ -1166,7 +1166,7 @@ if __name__ == "__main__":
                     print("args.guiType = qt")
                     args.guiType = "qt"
                 else:
-                    print("args.guiType = cv")
+                    print("args.guiType = cv heeeeeeeeere")
                     args.guiType = "cv"
             s.runDemo(args)
     except KeyboardInterrupt:
