@@ -686,8 +686,7 @@ def main_thread(threadName, delay):
 
 # Define a function for the thread
 def main_thread(threadName, delay):
-    args.guiType = "cv"
-    runOpenCv()
+    print("Hello")
 
 # Define a function for the thread
 def print_time(threadName, delay):
@@ -696,7 +695,9 @@ def print_time(threadName, delay):
 if __name__ == "__main__":
     try:
         thread.start_new_thread( main_thread, ("Main", 2, ) )
-        #thread.start_new_thread( print_time, ("Thread-2", 4, ) )
+        args.guiType = "cv"
+        runOpenCv
+        #thread.start_new_thread( print_time, ("Thread-2", , ) )
         while 1:
             pass
     except KeyboardInterrupt:
