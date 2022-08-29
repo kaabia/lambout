@@ -5,11 +5,8 @@ import sys
 
 if sys.version_info[0] < 3:
     raise Exception("Must be using Python 3")
-import argparse
-import json
 import os
 import time
-import traceback
 from functools import cmp_to_key
 from itertools import cycle
 from pathlib import Path
@@ -666,18 +663,20 @@ def send_data(x,y,z):
     except:
         print("connection cannot be established")
 
+###########################################################################
+################################### MAIN ##################################
+###########################################################################
 
-HOST = "" # The remote host
+HOST = ""    # The remote host
 PORT = 30000 # The same port as used by the server
 
 print("Starting Program")
 
-count = 0
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.settimeout(1)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-s.bind((HOST, PORT)) # Bind to the port 
-s.listen(5) # Now wait for client connection
+mysocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+mysocket.settimeout(1)
+mysocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+mysocket.bind((HOST, PORT)) # Bind to the port 
+mysocket.listen(5) # Now wait for client connection
 
 if __name__ == "__main__":
     try:
