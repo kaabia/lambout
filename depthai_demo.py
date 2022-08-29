@@ -691,13 +691,12 @@ def main_thread(threadName, delay):
 
 # Define a function for the thread
 def print_time(threadName, delay):
-   while 1:
-      print ("{}: {}".format(threadName, time.ctime(time.time())))
+    print("Hello")
 
 if __name__ == "__main__":
     try:
         thread.start_new_thread( main_thread, ("Main", 2, ) )
-        thread.start_new_thread( print_time, ("Thread-2", 4, ) )
+        #thread.start_new_thread( print_time, ("Thread-2", 4, ) )
         while 1:
             pass
     except KeyboardInterrupt:
