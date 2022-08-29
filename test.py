@@ -1,5 +1,6 @@
 
 import _thread as thread
+import imp
 import time
 
 # Define a function for the thread
