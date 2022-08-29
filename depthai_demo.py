@@ -14,6 +14,7 @@ import platform
 import socket
 from threading import Thread
 from time import sleep
+import _thread as thread
 
 ready_to_send = False
 
@@ -678,9 +679,26 @@ mysocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 mysocket.bind((HOST, PORT)) # Bind to the port 
 mysocket.listen(5) # Now wait for client connection
 
+# Define a function for the thread
+def main_thread(threadName, delay):
+   while 1:
+      print ("{}: {}".format(threadName, time.ctime(time.time())))
+
+# Define a function for the thread
+def main_thread(threadName, delay):
+    args.guiType = "cv"
+    runOpenCv()
+
+# Define a function for the thread
+def print_time(threadName, delay):
+   while 1:
+      print ("{}: {}".format(threadName, time.ctime(time.time())))
+
 if __name__ == "__main__":
     try:
-        args.guiType = "cv"
-        runOpenCv()
+        thread.start_new_thread( main_thread, ("Main", 2, ) )
+        thread.start_new_thread( print_time, ("Thread-2", 4, ) )
+        while 1:
+            pass
     except KeyboardInterrupt:
         sys.exit(0)
