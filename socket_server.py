@@ -8,7 +8,7 @@ serversocket = socket.socket(
 # get local machine name
 host = socket.gethostname()                           
 
-port = 9998                                           
+port = 30000                                           
 
 # bind to the port
 serversocket.bind((host, port))                                  
@@ -21,10 +21,7 @@ while True:
    clientsocket,addr = serversocket.accept()      
    print("Got a connection from %s" % str(addr))
    
-   while 1:
-      # Receive no more than 1024 bytes
-      msg = clientsocket.recv(1024)
-      print("Received message : {}".format(msg))
+   msg = 'Thank you for connecting'+ "\r\n"
 
    clientsocket.send(msg.encode('ascii'))
    clientsocket.close()
