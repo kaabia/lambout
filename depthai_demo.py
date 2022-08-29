@@ -686,7 +686,9 @@ def main_thread(threadName, delay):
 
 # Define a function for the thread
 def main_thread(threadName, delay):
-    print("Hello")
+    while 1:
+        print("Hellooooooooooooooooooooooooo")
+        sleep(1)
 
 # Define a function for the thread
 def print_time(threadName, delay):
