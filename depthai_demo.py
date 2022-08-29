@@ -665,7 +665,7 @@ def send_data(x,y,z):
         print("connection cannot be established")
 
 #function to create threads
-def send_thread(arg):
+def send_thread(threadName, delay):
     while 1:
         global ready_to_send
         if ready_to_send:
