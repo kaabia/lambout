@@ -645,8 +645,6 @@ def send_data(x,y,z):
         try:
             print ("start recieving request")
             msg = c.recv(1024).decode()
-            print("Joint Positions = ", msg)
-            msg = c.recv(1024).decode()
             print("Request = ", msg)
             X= y+0.33
             Y= x-0.03
