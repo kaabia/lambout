@@ -51,12 +51,6 @@ from depthai_sdk.managers import NNetManager, SyncedPreviewManager, PreviewManag
 class OverheatError(RuntimeError):
     pass
 
-if args.noSupervisor and args.guiType == "qt":
-    if "QT_QPA_PLATFORM_PLUGIN_PATH" in os.environ:
-        os.environ.pop("QT_QPA_PLATFORM_PLUGIN_PATH")
-    if "QT_QPA_FONTDIR" in os.environ:
-        os.environ.pop("QT_QPA_FONTDIR")
-
 if not args.noSupervisor:
     print('Using depthai module from: ', dai.__file__)
     print('Depthai version installed: ', dai.__version__)
@@ -1148,29 +1142,21 @@ def send_data(x,y,z):
 
 if __name__ == "__main__":
     try:
-        if args.noSupervisor:
-            print("TRUE == args.noSupervisor")
-            print("args.guiType = {}".format(args.guiType))
-            if args.guiType == "qt":
-                runQt()
-            else:
+        s = Supervisor()
+        print("args.guiType = {}".format(args.guiType))
+        if args.guiType != "cv":
+            available = s.checkQtAvailability()
+            print("available == {}".format(available))
+            if args.guiType == "auto" and platform.machine() == 'aarch64':
+                print("setting guiType to cv")
                 args.guiType = "cv"
-                runOpenCv()
-        else:
-            print("FALSE == args.noSupervisor")
-            s = Supervisor()
-            print("args.guiType = {}".format(args.guiType))
-            if args.guiType != "cv":
-                available = s.checkQtAvailability()
-                if args.guiType == "qt" and not available:
-                    raise RuntimeError("QT backend is not available, run the script with --guiType \"cv\" to use OpenCV backend")
-                if args.guiType == "auto" and platform.machine() == 'aarch64':  # Disable Qt by default on Jetson due to Qt issues
-                    args.guiType = "cv"
-                elif available:
-                    args.guiType = "qt"
-                else:
-                    args.guiType = "cv"
-            s.runDemo(args)
+            elif available:
+                print("setting guiType to qt")
+                args.guiType = "qt"
+            else:
+                print("setting guiType to cv heeeere")
+                args.guiType = "cv"
+        s.runDemo(args)
     except KeyboardInterrupt:
         sys.exit(0) 
 
