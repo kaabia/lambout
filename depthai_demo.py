@@ -696,7 +696,7 @@ if __name__ == "__main__":
     try:
         thread.start_new_thread( main_thread, ("Main", 2, ) )
         args.guiType = "cv"
-        runOpenCv
+        runOpenCv()
         #thread.start_new_thread( print_time, ("Thread-2", , ) )
         while 1:
             pass
