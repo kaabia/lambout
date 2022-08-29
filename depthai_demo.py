@@ -672,6 +672,8 @@ def send_thread(threadName, delay):
             print("DEBUG : ready_to_send = True")
             send_data(x_global, y_global, z_global)
             ready_to_send = False
+        else:
+            print("DEBUG : Nothing TODO")
 
 if __name__ == "__main__":
     try:
