@@ -666,11 +666,11 @@ def send_data(x,y,z):
         print("connection cannot be established")
 
 #function to create threads
-def send_thread():
+def send_thread(threadName, delay):
     while 1:
         global ready_to_send
         if ready_to_send:
-            print("DEBUG : ready_to_send = True")
+            print("{} -> DEBUG : ready_to_send = True".format(threadName))
             send_data(x_global, y_global, z_global)
             ready_to_send = False
         else:
@@ -679,7 +679,7 @@ def send_thread():
 
 if __name__ == "__main__":
     try:
-        thread.start_new_thread(send_thread)
+        thread.start_new_thread(send_thread, ("send_thread", 2, ))
         args.guiType = "cv"
         runOpenCv()
     except KeyboardInterrupt:
